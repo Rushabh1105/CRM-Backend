@@ -9,6 +9,15 @@ const handleError = (error, res )=>{
     })
 }
 
+// const validationError = (error, res )=>{
+//     res.status(400);
+//     res.json({
+//         message: error.message,
+//     })
+
+
+// }
+
 module.exports = {
     handleError
 }

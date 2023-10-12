@@ -7,9 +7,11 @@ const morgan = require('morgan');
 
 const userRoutes = require('./src/Routes/user.routes');
 const ticketRoutes = require('./src/Routes/ticket.routes');
+const tokensRoutes = require('./src/Routes/token.routes');
 const {handleError} = require('./src/Utils/errorHandler');
 const {PORT}  = require('./src/Config/config');
 const {connect} = require('./src/Config/dbConfig');
+const {connectRedis} = require('./src/Utils/redis.helper')
 
 
 const app = express();
@@ -23,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true}) );
 
 app.use('/v1/user', userRoutes);
 app.use('/v1/ticket', ticketRoutes);
+app.use('/v1/tokens', tokensRoutes);
 
 app.use("*", (req, res, next) => {
 
@@ -38,5 +41,7 @@ app.use("*", (error, req, res, next) => {
 app.listen( PORT, async () => {
     await connect();
     console.log("mongodb connection established");
+    await connectRedis();
+    console.log('redis connection established');
     console.log(`Server is running on port ${PORT}`);
 })

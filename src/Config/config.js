@@ -8,4 +8,5 @@ module.exports = {
     SECRET_KEY: process.env.SECRET_KEY,
     REFRESH_SECRET: process.env.REFRESH_SECRET,
     REDIS_URL: process.env.REDIS_URL,
+    REFREST_EXP_DATE: process.env.REFREST_EXP_DATE,
 }

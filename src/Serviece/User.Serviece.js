@@ -69,9 +69,21 @@ const getUser = async(userId) => {
     }
 }
 
+
+const getUserByEmail = async(email) => {
+    try {
+        const user = await User.findOne({email});
+        return user;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
     createUser,
     validateUser,
     storeToken,
     getUser,
+    getUserByEmail,
 }

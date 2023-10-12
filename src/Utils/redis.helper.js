@@ -3,10 +3,15 @@ const {REDIS_URL} = require('../Config/config');
 
 const client = createClient(REDIS_URL)
 
+const connectRedis = async () => {
+    console.log('Connecting to redis...');
+    await client.connect();
+}
 
 const setJWT = async (key, value) => {
-    await client.connect();
+    // await client.connect();
     try {
+
         await client.set(key, `${value}`, (err, res) => {
             if(err){
                 return err;
@@ -22,7 +27,7 @@ const setJWT = async (key, value) => {
 
 
 const getJWT = async (key) => {
-    await client.connect();
+    // await client.connect();
     try {
         const userId = await client.get(key);
         return userId;
@@ -31,7 +36,21 @@ const getJWT = async (key) => {
     }
 }
 
+
+const deleteJWT = async (key) => {
+    // await client.connect();
+    try {
+        client.del(key);
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+    
+}
+
 module.exports = {
     setJWT,
     getJWT,
+    deleteJWT,
+    connectRedis,
 }

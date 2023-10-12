@@ -19,11 +19,23 @@ const createRefreshJWT =async (payload) => {
     });
 
     const result = await storeToken(payload.response._id, refreshToken);
-    console.log(result);
+    // console.log(result);
+
     return refreshToken;
+}
+
+const verifyToken = async (token) => {
+    try {
+        const payload = await jwt.verify(token, SECRET_KEY);
+        return payload;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 module.exports = {
     createAccessJWT,
     createRefreshJWT,
+    verifyToken,
 }

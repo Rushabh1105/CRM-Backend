@@ -1,6 +1,7 @@
 const UserService = require('../Serviece/User.Serviece');
 const {createAccessJWT,createRefreshJWT} = require('../Utils/jwt.helper');
 
+
 const createUser = async (req, res) => {
     try {
         console.log(req.body);
@@ -46,8 +47,23 @@ const signin = async (req, res) => {
     }
 }
 
+const getUser = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        const response = await UserService.getUser(userId);
+
+        return res.json({
+            message: 'hello world',
+            data: response,
+        })
+    } catch (error) {
+        
+    }
+}
 
 module.exports = {
     createUser,
     signin,
+    getUser,
 }

@@ -22,14 +22,10 @@ const setJWT = async (key, value) => {
 
 
 const getJWT = async (key) => {
+    await client.connect();
     try {
-        await client.get("key", (err, res) => {
-            if(err){
-                return err;
-            }
-
-            return res;
-        })
+        const userId = await client.get(key);
+        return userId;
     } catch (error) {
         return error
     }

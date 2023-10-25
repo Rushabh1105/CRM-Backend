@@ -1,5 +1,6 @@
 const UserService = require('../Serviece/User.Serviece');
 const pinServiece = require('../Serviece/ResetPin.Serviece');
+const emailHelper = require('../Utils/emailHelper');
 const {createAccessJWT,createRefreshJWT} = require('../Utils/jwt.helper');
 
 
@@ -73,9 +74,18 @@ const resetPassword = async(req, res) => {
 
         if(user && user._id){
             const response = await pinServiece.setUserPin(email);
-            return res.status(200).json({
-                data : response,
+            const result = await emailHelper.emailProcessor(email, response.pin);
+            console.log(result);
+            if( result && result.messageId){
+                return res.status(200).json({
+                    message: 'Pin send successfully to your email address'
+                })
+            }
+
+            return res.status(500).json({
+                message: 'Something went wrong',
             })
+
         }
 
         return res.status(401).json({

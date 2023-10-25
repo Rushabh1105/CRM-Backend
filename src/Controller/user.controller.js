@@ -1,4 +1,5 @@
 const UserService = require('../Serviece/User.Serviece');
+const pinServiece = require('../Serviece/ResetPin.Serviece');
 const {createAccessJWT,createRefreshJWT} = require('../Utils/jwt.helper');
 
 
@@ -58,12 +59,40 @@ const getUser = async (req, res) => {
             data: response,
         })
     } catch (error) {
-        
+        return res.status(401).json({
+            err: error.message,
+        })
     }
 }
+
+const resetPassword = async(req, res) => {
+    const {email} = req.body;
+    try {
+        const user = await UserService.getUserByEmail(email);
+        // console.log(response)
+
+        if(user && user._id){
+            const response = await pinServiece.setUserPin(email);
+            return res.status(200).json({
+                data : response,
+            })
+        }
+
+        return res.status(401).json({
+            message: 'user not found',
+        })
+
+    } catch (error) {
+        return res.status(401).json({
+            err: error.message,
+        })
+    }
+}
+
 
 module.exports = {
     createUser,
     signin,
     getUser,
+    resetPassword,
 }

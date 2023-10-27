@@ -12,6 +12,10 @@ const resetPinSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    expDate: {
+        type: Date,
+        required: true,
+    }
 }, {timestamps: true});
 
 

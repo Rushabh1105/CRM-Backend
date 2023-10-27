@@ -38,7 +38,8 @@ const emailProcessor = async (email, pin) => {
         html: `<p>Here is Your Password reset pin : <b>${pin}</b></p>`,
     }
 
-    send(info)
+    const response = await send(info);
+    return response;
 }
 
 

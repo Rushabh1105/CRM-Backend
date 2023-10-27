@@ -80,10 +80,24 @@ const getUserByEmail = async(email) => {
     }
 }
 
+const updatePassword = async(email, newPassword) => {
+    try {
+        const user = await User.findOne({email});
+        user.password = newPassword;
+
+        const response = await user.save();
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
     createUser,
     validateUser,
     storeToken,
     getUser,
     getUserByEmail,
+    updatePassword,
 }

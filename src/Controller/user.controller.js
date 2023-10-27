@@ -76,14 +76,10 @@ const resetPassword = async(req, res) => {
             const response = await pinServiece.setUserPin(email);
             const result = await emailHelper.emailProcessor(email, response.pin);
             console.log(result);
-            if( result && result.messageId){
-                return res.status(200).json({
-                    message: 'Pin send successfully to your email address'
-                })
-            }
+            
 
-            return res.status(500).json({
-                message: 'Something went wrong',
+            return res.status(200).json({
+                message: 'If email is exist in databse otp will be sent soon',
             })
 
         }
@@ -100,9 +96,47 @@ const resetPassword = async(req, res) => {
 }
 
 
+const updateResetPassword = async(req, res ) => {
+    try {
+        const {email, pin, password} = req.body;
+        const response = await pinServiece.getPin(email, pin);
+
+        if(response._id){
+            // let createdAt = response.createdAt;
+            let expDate = response.expDate;
+            console.log(expDate);
+            let today = new Date();
+            console.log(today);
+
+            if(expDate > today){
+                const data = await UserService.updatePassword(email, password);
+                const deletePin = await pinServiece.deletePin(response._id)
+
+                return res.json({
+                    message: 'user password updated successfully',
+                    success: true
+                })
+            }
+            // console.log(createdAt)
+        }
+
+
+        return res.json({
+            message: 'Invalid Pin',
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: 'Something went wrong',
+        })
+    }
+}
+
+
 module.exports = {
     createUser,
     signin,
     getUser,
     resetPassword,
+    updateResetPassword,
 }

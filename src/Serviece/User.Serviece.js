@@ -1,4 +1,5 @@
 const User = require('../Models/User.Schema');
+const {deleteJWT} = require('../Utils/redis.helper')
 
 const createUser = async (data) => {
     try {
@@ -93,6 +94,18 @@ const updatePassword = async(email, newPassword) => {
     }
 }
 
+const deleteTokens = async (_id, accessJWT) => {
+    try {
+        await deleteJWT(accessJWT);
+
+        const response = await storeToken(_id, '');
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
     createUser,
     validateUser,
@@ -100,4 +113,5 @@ module.exports = {
     getUser,
     getUserByEmail,
     updatePassword,
+    deleteTokens,
 }

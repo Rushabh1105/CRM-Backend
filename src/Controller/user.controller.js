@@ -132,6 +132,24 @@ const updateResetPassword = async(req, res ) => {
     }
 }
 
+const logout = async (req, res) => {
+    try {
+        const id = req.userId;
+        const {auth_token} = req.headers;
+        const response = await UserService.deleteTokens(id, auth_token);
+
+        return res.status(200).json({
+            success: true,
+            data: response
+        })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: 'Something went wrong',
+        })
+    }
+}
+
 
 module.exports = {
     createUser,
@@ -139,4 +157,5 @@ module.exports = {
     getUser,
     resetPassword,
     updateResetPassword,
+    logout,
 }
